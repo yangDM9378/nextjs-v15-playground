@@ -5,6 +5,12 @@ import { delay } from "@/util/delay";
 import { Suspense } from "react";
 import BookItemSkeleton from "@/components/skeleton/book-item-skeleton";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "홈",
+  description: "온바이트 북스 - 추천 도서와 전체 도서 목록을 확인하세요.",
+};
 
 // export const dynamic = 'auto'
 

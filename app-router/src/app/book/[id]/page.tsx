@@ -1,12 +1,37 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
-import { ReviewData } from "@/types";
+import { ReviewData, BookData } from "@/types";
 import ReviewItem from "@/components/review-item";
 import { ReviewEditor } from "@/components/review-editor";
+import type { Metadata } from "next";
 
 // export const dynamicParams = false;
-export function generateStaticParams () {
-  return [{id:"1"}, {id:"2"}, {id:"2"}]
+export function generateStaticParams() {
+  return [{ id: "1" }, { id: "2" }, { id: "3" }];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`
+  );
+  if (!response.ok) {
+    return { title: "도서 정보를 찾을 수 없습니다." };
+  }
+  const book: BookData = await response.json();
+  return {
+    title: book.title,
+    description: book.description,
+    openGraph: {
+      title: book.title,
+      description: book.description,
+      images: [book.coverImgUrl],
+    },
+  };
 }
 
 async function BookDetail({bookId}: {bookId: string}) {
